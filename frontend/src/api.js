@@ -10,15 +10,6 @@ export const api = {
     return res.json();
   },
 
-  login: async (payload) => {
-    const res = await fetch(`${API_BASE}/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
-    return res.json();
-  },
-
   getQuestions: async () => {
     const res = await fetch(`${API_BASE}/questions`);
     return res.json();
