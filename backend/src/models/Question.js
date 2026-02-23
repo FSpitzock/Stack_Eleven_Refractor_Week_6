@@ -11,7 +11,7 @@ const answerSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    userId: {
+    author: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: true,
@@ -38,7 +38,7 @@ const questionSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    userId: {
+    author: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: true,

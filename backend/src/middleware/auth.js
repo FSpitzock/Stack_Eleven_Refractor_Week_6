@@ -1,18 +1,35 @@
 import jwt from 'jsonwebtoken';
+import User from './models/User.js';
 
-export const authMiddleware = (req, res, next) => {
-  const header = req.headers.authorization || '';
-  const token = header.startsWith('Bearer ') ? header.slice(7) : null;
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+});
 
-  if (!token) {
-    return res.status(401).json({ message: 'Authentication required' });
-  }
+await server.start();
 
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded;
-    return next();
-  } catch {
-    return res.status(401).json({ message: 'Invalid or expired token' });
-  }
-};
+app.use(
+  '/graphql',
+  express.json(),
+  expressMiddleware(server, {
+    context: async ({ req }) => {
+      const authHeader = req.headers.authorization || '';
+      const token = authHeader.startsWith('Bearer ')
+        ? authHeader.slice(7)
+        : null;
+
+      if (!token) {
+        return { user: null };  // no user, just anonymous
+      }
+
+      try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const user = await User.findById(decoded.id);
+        return { user };
+      } catch (err) {
+        console.warn('Invalid token', err);
+        return { user: null };
+      }
+    },
+  })
+);
