@@ -1,8 +1,6 @@
 import React from 'react';
-
-// ⚠️ Import Apollo hooks this way for Vite compatibility
-import pkg from '@apollo/client';
-const { useQuery } = pkg;
+// ✅ Apollo hooks import for Vite and React
+import { useQuery } from '@apollo/client/react';
 
 import { GET_QUESTIONS } from '../graphql/queries';
 
@@ -18,7 +16,7 @@ export default function QuestionsList() {
       <ul>
         {data.questions.map((q) => (
           <li key={q.id}>
-            <strong>{q.title}</strong> — by {q.author?.username}
+            <strong>{q.title}</strong> — by {q.author?.username || 'Unknown'}
           </li>
         ))}
       </ul>
